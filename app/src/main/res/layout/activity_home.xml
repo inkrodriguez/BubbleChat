@@ -36,7 +36,7 @@
             android:id="@+id/btnStatus"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/btn_status" />
+            android:background="@drawable/ic_status_off" />
 
         <View
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:id="@+id/btnMessages"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/btn_message" />
+            android:background="@drawable/ic_message_on" />
 
         <View
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             android:id="@+id/btnContatos"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/btn_contatos" />
+            android:background="@drawable/ic_contatos_off" />
 
         <View
             android:layout_width="match_parent"

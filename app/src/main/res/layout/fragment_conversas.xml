@@ -11,7 +11,7 @@
         android:layout_width="371dp"
         android:layout_height="446dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="10"
+        tools:itemCount="20"
         tools:listitem="@layout/item_messages" />
 
 </FrameLayout>

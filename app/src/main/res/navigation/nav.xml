@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/conversas">
+
+    <fragment
+        android:id="@+id/conversas"
+        android:name="com.inkrodriguez.bubblechat.Conversas"
+        android:label="fragment_conversas"
+        tools:layout="@layout/fragment_conversas" />
+    <fragment
+        android:id="@+id/contatos"
+        android:name="com.inkrodriguez.bubblechat.Contatos"
+        android:label="fragment_contatos"
+        tools:layout="@layout/fragment_contatos" />
+    <fragment
+        android:id="@+id/status"
+        android:name="com.inkrodriguez.bubblechat.Status"
+        android:label="fragment_status"
+        tools:layout="@layout/fragment_status" />
+</navigation>

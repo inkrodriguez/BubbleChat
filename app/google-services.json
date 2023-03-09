@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "60681020829",
+    "project_id": "bubblechat-908f1",
+    "storage_bucket": "bubblechat-908f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60681020829:android:16d0d11196dbf641dafb74",
+        "android_client_info": {
+          "package_name": "com.inkrodriguez.bubblechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60681020829-qff4g5pbhn4g3qd1dacelb7iquggs31v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt5frTdBemwGAOLlMYG52y4CMSvE1H7PQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60681020829-qff4g5pbhn4g3qd1dacelb7iquggs31v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 package com.inkrodriguez.bubblechat.data
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.location.GnssAntennaInfo.Listener
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.inkrodriguez.bubblechat.R
+import com.inkrodriguez.bubblechat.UserActivity
 
 
 class MyAdapter(private val characters: List<User>): RecyclerView.Adapter<MyAdapter.CharacterViewHolder>() {
@@ -27,7 +29,8 @@ class MyAdapter(private val characters: List<User>): RecyclerView.Adapter<MyAdap
         //holder.itemView.setOnClickListener { Toast.makeText(it.context, "Oii", Toast.LENGTH_SHORT).show() }
         holder.itemView.setOnClickListener {
             Toast.makeText(it.context, characters[position].nome, Toast.LENGTH_SHORT).show()
-            //it.context.startActivity()
+            var intent = Intent(it.context, UserActivity::class.java).putExtra("id", characters[position].id)
+            it.context.startActivity(intent)
         }
     }
 

@@ -1,9 +1,12 @@
 package com.inkrodriguez.bubblechat
 
 import android.content.ContentValues.TAG
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.tasks.Tasks.await
@@ -17,6 +20,7 @@ import com.inkrodriguez.bubblechat.data.*
 import com.inkrodriguez.bubblechat.databinding.ActivityUserBinding
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 
 class UserActivity : AppCompatActivity() {
@@ -27,94 +31,139 @@ class UserActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        getList()
+//        getList()
+        exibir()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        var intent = intent.getStringExtra("id")
         firebaseUtils.fireBinding = this.binding
 
         binding.btnEnviarMessage.setOnClickListener {
-            getList()
             enviarMensagem()
-//            recoverId {
-//                var docId = it?.substringBefore(",").toString().toInt()
-//                var idChat = it?.substringAfter(",").toString().toInt()
-//
-//                var novoDocId = docId.plus(1)
-//                var novoIdChat = idChat.plus(1)
-//                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-//                binding.editMessage.setText("$novoDocId e $novoIdChat")
-//            }
+            exibir()
+            binding.editMessage.setText("")
         }
     }
 
 
+    //APARECER OS DADOS DA LISTA
+    //CLICAR NO BOTÃO E ENVIAR A MENSAGEM
+
+    fun exibir() {
+        var recyclerView = binding.recyclerViewChat
+        val db = Firebase.firestore
+        db.collection("messages")
+            .orderBy("date", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                val messages = result.documents.map { document ->
+                    val message = document.getString("message")
+                    val date = document.getString("date")
+                    Chat(message = message.toString(), date = date.toString())
+                }
+                val adapter = AdapterMessage(messages)
+                recyclerView.adapter = adapter
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "Error getting documents: ", exception)
+            }
+
+    }
+
     fun getList() {
         lifecycleScope.launch {
             var lista: MutableList<Chat> = mutableListOf()
+            var recyclerView = binding.recyclerViewChat
+            var adapter = AdapterMessage(lista)
 
-            db.collection("messages").orderBy("id", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
+            db.collection("messages").orderBy("date", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
                 value?.documents?.forEach {
-
-                    var recyclerView = binding.recyclerViewChat
-                    var adapter = AdapterMessage(lista)
-                    adapter.notifyItemChanged(lista.size)
                     recyclerView.adapter = adapter
-
+                    //lista.clear()
                     lista.add(Chat(message = it.get("message").toString()))
-
+                        adapter.notifyDataSetChanged()
                 }
             }
         }
     }
 
+    var mesAtual: String = ""
 
-    private fun recoverId(callback: (String?) -> Unit) {
-        var lastFieldPath: String? = null
-        var lastId: String? = null
-        db.collection("messages").orderBy("id", Query.Direction.DESCENDING).limit(1)
-            .addSnapshotListener(EventListener { value, error ->
-                if (error != null) {
-                    Log.w(TAG, "Listen failed.", error)
-                    callback(null)
-                    return@EventListener
-                }
-
-                value?.forEach {
-                    lastId = it.get("id").toString()
-                    lastFieldPath = it.reference.id
-                }
-
-                callback("$lastId,$lastFieldPath")
-            })
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun receiveData(): LocalDateTime{
+        return LocalDateTime.now()
     }
 
-    fun enviarMensagem() {
-        getList()
-        recoverId {
-            var docId = it?.substringBefore(",").toString().toInt()
-            var idChat = it?.substringAfter(",").toString().toInt()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatData(): String {
+        var month = receiveData().month
+        val dayOfMonth = receiveData().dayOfMonth
+        val dayOfYear = receiveData().year
+        val hour = receiveData().hour
+        val minute = receiveData().minute
+        val second = receiveData().second
+        var secondFormat: String
+        var minuteFormat: String
+        var hourFormat: String
 
-            var novoDocId = docId.plus(1)
-            var novoIdChat = idChat.plus(1)
+        when(month.value) {
+            1 -> mesAtual = "janeiro"
+            2 -> mesAtual = "fevereiro"
+            3 -> mesAtual = "março"
+            4 -> mesAtual = "abril"
+            5 -> mesAtual = "maio"
+            6 -> mesAtual = "junho"
+            7 -> mesAtual = "julho"
+            8 -> mesAtual = "agosto"
+            9 -> mesAtual = "setembro"
+            10 -> mesAtual = "outubro"
+            11 -> mesAtual = "novembro"
+            12 -> mesAtual = "dezembro"
+        }
+
+        secondFormat = addZeroBeforeNumber(second)
+        minuteFormat = addZeroBeforeNumber(minute)
+        hourFormat = addZeroBeforeNumber(hour)
+        return "$dayOfMonth de $mesAtual de $dayOfYear às $hourFormat:$minuteFormat:$secondFormat UTC-3"
+
+    }
+
+    private fun addZeroBeforeNumber(number: Int): String {
+        return if (number < 10) {
+            "0$number"
+        } else {
+            number.toString()
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun enviarMensagem() {
         lifecycleScope.launch {
-            val chatCollection = db.collection("messages").document("$novoDocId")
+            val chatCollection = db.collection("messages")
             var message = binding.editMessage.text.toString()
 
             var messageMap = hashMapOf(
-                "id" to novoIdChat,
+                "date" to formatData(),
                 "message" to message
             )
 
-            chatCollection.set(messageMap)
-            Toast.makeText(this@UserActivity, novoDocId.toString() , Toast.LENGTH_SHORT).show()
+            chatCollection.add(messageMap).addOnSuccessListener {
+                soundSendingMessage()
+            }
         }
         }
-        }
+
+    fun soundSendingMessage(){
+        var enviomessage = R.raw.enviomessage
+        var mediaPlayer: MediaPlayer = MediaPlayer.create(this@UserActivity.applicationContext, enviomessage);
+        mediaPlayer.start();
+    }
+
 }

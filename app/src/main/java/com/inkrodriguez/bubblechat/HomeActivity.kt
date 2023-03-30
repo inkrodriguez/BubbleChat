@@ -28,6 +28,9 @@ class HomeActivity : AppCompatActivity()  {
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setContentView(binding.root)
 
+        var intent = intent.getStringExtra("username")
+        var usuarioAtual = intent.toString()
+
         viewModel.vmBinding = this.binding
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment

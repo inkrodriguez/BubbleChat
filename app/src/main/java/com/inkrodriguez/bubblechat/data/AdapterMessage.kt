@@ -1,19 +1,16 @@
 package com.inkrodriguez.bubblechat.data
 
-import android.app.ActionBar.LayoutParams
-import android.graphics.Color
-import android.view.Gravity
+import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.inkrodriguez.bubblechat.R
 
 
-class AdapterMessage(private val messages: List<Chat>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterMessage(private val messages: List<Chat>, private val extras: Bundle?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val VIEW_TYPE_RODRIGO = 1
@@ -52,19 +49,21 @@ class AdapterMessage(private val messages: List<Chat>): RecyclerView.Adapter<Rec
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (messages[position].remetente == "Rodrigo") {
-            VIEW_TYPE_RODRIGO
-        } else {
+        val valor = extras?.getString("valorSalvo")
+
+        return if (messages[position].remetente != "$valor") {
             VIEW_TYPE_SARA
+        } else {
+            VIEW_TYPE_RODRIGO
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_RODRIGO) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_right, parent, false)
             RodrigoViewHolder(view)
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_right, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
             SaraViewHolder(view)
         }
     }

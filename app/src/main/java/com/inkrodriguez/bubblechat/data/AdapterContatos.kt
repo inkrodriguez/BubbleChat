@@ -3,6 +3,7 @@ package com.inkrodriguez.bubblechat.data
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.inkrodriguez.bubblechat.Conversas
+import com.inkrodriguez.bubblechat.HomeActivity
 import com.inkrodriguez.bubblechat.R
 import com.inkrodriguez.bubblechat.UserActivity
 
@@ -25,9 +28,14 @@ class AdapterContatos(private val characters: List<User>): RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(characters[position], )
+        holder.bind(characters[position])
+        var username = characters[position].nome
 
-
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, UserActivity::class.java)
+            intent.putExtra("username", username)
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -1,7 +1,9 @@
 package com.inkrodriguez.bubblechat
 
+import android.content.ContentValues
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.inkrodriguez.bubblechat.data.Connect
-import com.inkrodriguez.bubblechat.data.MyAdapter
-import com.inkrodriguez.bubblechat.data.User
+import com.inkrodriguez.bubblechat.data.*
 
 class Conversas : Fragment() {
 
@@ -35,22 +35,25 @@ class Conversas : Fragment() {
 
         var view = inflater.inflate(R.layout.fragment_conversas, container, false)
 
-        var lista3: MutableList<User> = mutableListOf()
-        db = FirebaseFirestore.getInstance()
-        db.collection("users").addSnapshotListener { value, error ->
-                value?.documents?.forEach {
+        var recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
-                    lista3.add(User(it.get("nome").toString()))
 
-                    try {
-                        var recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
-                        var adapter = MyAdapter(lista3)
-                        recyclerView?.adapter = adapter
-                    }
-                    catch (e: java.lang.Exception){
-
-                    }
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                val users = result.documents.map { document ->
+                    val nome = document.getString("nome")
+                    User(nome = nome.toString())
                 }
+
+                val adapter = AdapterContatos(users)
+
+                recyclerView.adapter = adapter
+
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d(ContentValues.TAG, "Error getting documents: ", exception)
             }
 
         return view
@@ -62,5 +65,7 @@ class Conversas : Fragment() {
         viewModel = ViewModelProvider(this).get(ConversasViewModel::class.java)
         // TODO: Use the ViewModel
     }
+
+
 
 }

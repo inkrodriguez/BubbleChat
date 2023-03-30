@@ -1,6 +1,7 @@
 package com.inkrodriguez.bubblechat
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -9,16 +10,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.tasks.Tasks.await
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.data.*
 import com.inkrodriguez.bubblechat.databinding.ActivityUserBinding
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -27,7 +23,6 @@ class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
     private var connect = Firebase.firestore
     private var db = connect
-    private var firebaseUtils = FirebaseUtils()
 
     override fun onStart() {
         super.onStart()
@@ -41,20 +36,27 @@ class UserActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        firebaseUtils.fireBinding = this.binding
+        var intent = intent.getStringExtra("username")
 
         binding.btnEnviarMessage.setOnClickListener {
             enviarMensagem()
             exibir()
             binding.editMessage.setText("")
+            Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
 
-    //APARECER OS DADOS DA LISTA
-    //CLICAR NO BOTÃO E ENVIAR A MENSAGEM
-
     fun exibir() {
+        var intent = intent.getStringExtra("username")
+
+        val sharedPref = applicationContext.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
+        val valorSalvo = sharedPref?.getString("USERNAME", "NADA ENCONTRADO")
+        val extras = Bundle()
+        extras.putString("valorSalvo", valorSalvo.toString())
+//        extras.putString("usuarioAtual", intent.toString())
+
+
         var recyclerView = binding.recyclerViewChat
         val db = Firebase.firestore
         db.collection("messages")
@@ -67,7 +69,7 @@ class UserActivity : AppCompatActivity() {
                     val remetente = document.getString("remetente")
                     Chat(message = message.toString(), date = date.toString(), remetente = remetente.toString())
                 }
-                val adapter = AdapterMessage(messages)
+                val adapter = AdapterMessage(messages, extras)
                 recyclerView.adapter = adapter
             }
             .addOnFailureListener { exception ->
@@ -130,13 +132,18 @@ class UserActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun enviarMensagem() {
         lifecycleScope.launch {
+            var intent = intent.getStringExtra("username")
             val chatCollection = db.collection("messages")
             var message = binding.editMessage.text.toString()
-            var userAtual = "Sara"
+            val sharedPref = applicationContext.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
+            val remetente = sharedPref.getString("USERNAME", "SEM DADOS")
+
+            var destinatario = intent
 
             var messageMap = hashMapOf(
                 "date" to formatData(),
-                "remetente" to userAtual,
+                "remetente" to remetente,
+                "destinatario" to destinatario,
                 "message" to message
             )
 

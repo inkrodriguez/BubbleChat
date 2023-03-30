@@ -6,5 +6,4 @@ data class Chat(
     var destinatario: String = "",
     var message: String = "",
     var date: String = "",
-    var hora: String = ""
 )

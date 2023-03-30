@@ -31,8 +31,7 @@ class UserActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-//        getList()
-        exibir()
+            exibir()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,7 +64,8 @@ class UserActivity : AppCompatActivity() {
                 val messages = result.documents.map { document ->
                     val message = document.getString("message")
                     val date = document.getString("date")
-                    Chat(message = message.toString(), date = date.toString())
+                    val remetente = document.getString("remetente")
+                    Chat(message = message.toString(), date = date.toString(), remetente = remetente.toString())
                 }
                 val adapter = AdapterMessage(messages)
                 recyclerView.adapter = adapter
@@ -76,22 +76,6 @@ class UserActivity : AppCompatActivity() {
 
     }
 
-    fun getList() {
-        lifecycleScope.launch {
-            var lista: MutableList<Chat> = mutableListOf()
-            var recyclerView = binding.recyclerViewChat
-            var adapter = AdapterMessage(lista)
-
-            db.collection("messages").orderBy("date", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
-                value?.documents?.forEach {
-                    recyclerView.adapter = adapter
-                    //lista.clear()
-                    lista.add(Chat(message = it.get("message").toString()))
-                        adapter.notifyDataSetChanged()
-                }
-            }
-        }
-    }
 
     var mesAtual: String = ""
 
@@ -148,9 +132,11 @@ class UserActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val chatCollection = db.collection("messages")
             var message = binding.editMessage.text.toString()
+            var userAtual = "Sara"
 
             var messageMap = hashMapOf(
                 "date" to formatData(),
+                "remetente" to userAtual,
                 "message" to message
             )
 
@@ -161,9 +147,9 @@ class UserActivity : AppCompatActivity() {
         }
 
     fun soundSendingMessage(){
-        var enviomessage = R.raw.enviomessage
-        var mediaPlayer: MediaPlayer = MediaPlayer.create(this@UserActivity.applicationContext, enviomessage);
-        mediaPlayer.start();
+        val mediaPlayer = MediaPlayer.create(this, R.raw.enviomessage)
+        mediaPlayer.start()
+
     }
 
 }

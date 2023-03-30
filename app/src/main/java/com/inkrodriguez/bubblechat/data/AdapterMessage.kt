@@ -1,48 +1,85 @@
 package com.inkrodriguez.bubblechat.data
 
-import android.annotation.SuppressLint
-import android.content.Intent
+import android.app.ActionBar.LayoutParams
 import android.graphics.Color
-import android.location.GnssAntennaInfo.Listener
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.inkrodriguez.bubblechat.R
-import com.inkrodriguez.bubblechat.UserActivity
 
 
-class AdapterMessage(private val characters: List<Chat>): RecyclerView.Adapter<AdapterMessage.CharacterViewHolder>() {
+class AdapterMessage(private val messages: List<Chat>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_chat, parent, false)
-        return CharacterViewHolder(view)
+    companion object {
+        const val VIEW_TYPE_RODRIGO = 1
+        const val VIEW_TYPE_SARA = 2
     }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(characters[position])
-        //holder.itemView.setOnClickListener { Toast.makeText(it.context, "Oii", Toast.LENGTH_SHORT).show() }
-        holder.itemView.setOnClickListener {
-            //Toast.makeText(it.context, characters[position].messages, Toast.LENGTH_SHORT).show()
+    inner class RodrigoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val messageTextView: TextView = itemView.findViewById(R.id.tvChatRemetente)
+        private val timestampTextView: TextView = itemView.findViewById(R.id.tvHour)
+        private val remetente: TextView = itemView.findViewById(R.id.tvRemetente)
+
+        fun bind(message: Chat) {
+
+            var splitHour = message.date.split(" ")
+            var hourFormat = splitHour[6]
+
+            timestampTextView.text = hourFormat.dropLast(3)
+            messageTextView.text = message.message
+            remetente.text = message.remetente
+        }
+    }
+
+    inner class SaraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val messageTextView: TextView = itemView.findViewById(R.id.tvChatRemetente)
+        private val timestampTextView: TextView = itemView.findViewById(R.id.tvHour)
+        private val remetente: TextView = itemView.findViewById(R.id.tvRemetente)
+
+        fun bind(message: Chat) {
+            var splitHour = message.date.split(" ")
+            var hourFormat = splitHour[6]
+
+            timestampTextView.text = hourFormat.dropLast(3)
+            messageTextView.text = message.message
+            remetente.text = message.remetente
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (messages[position].remetente == "Rodrigo") {
+            VIEW_TYPE_RODRIGO
+        } else {
+            VIEW_TYPE_SARA
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_RODRIGO) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat, parent, false)
+            RodrigoViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_right, parent, false)
+            SaraViewHolder(view)
+        }
+    }
+
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val message = messages[position]
+        if (holder.itemViewType == VIEW_TYPE_RODRIGO) {
+            (holder as RodrigoViewHolder).bind(message)
+        } else {
+            (holder as SaraViewHolder).bind(message)
         }
     }
 
     override fun getItemCount(): Int {
-        return characters.size
-    }
-
-    //SERÁ O LAYOUT DO ITEM, RECUPERA OS DADOS DO ITEMVIEW.
-    class CharacterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bind(data: Chat) {
-            with(itemView) {
-                val message = findViewById<TextView>(R.id.tvChatRemetente)
-                message.text = data.message
-            }
-        }
+        return messages.size
     }
 }

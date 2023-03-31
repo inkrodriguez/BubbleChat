@@ -6,9 +6,11 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -21,6 +23,8 @@ import java.time.LocalDateTime
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
+    private lateinit var viewModel: UserViewModel
+    private lateinit var adapter: AdapterMessage
     private var connect = Firebase.firestore
     private var db = connect
 
@@ -43,6 +47,7 @@ class UserActivity : AppCompatActivity() {
             exibir()
             binding.editMessage.setText("")
             Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -61,20 +66,26 @@ class UserActivity : AppCompatActivity() {
         val db = Firebase.firestore
         db.collection("messages")
             .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .addOnSuccessListener { result ->
-                val messages = result.documents.map { document ->
-                    val message = document.getString("message")
-                    val date = document.getString("date")
-                    val remetente = document.getString("remetente")
-                    Chat(message = message.toString(), date = date.toString(), remetente = remetente.toString())
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
                 }
-                val adapter = AdapterMessage(messages, extras)
-                recyclerView.adapter = adapter
+
+                if (snapshot != null) {
+                    val messages = snapshot.documents.map { document ->
+                        val message = document.getString("message")
+                        val date = document.getString("date")
+                        val remetente = document.getString("remetente")
+                        Chat(message = message.toString(), date = date.toString(), remetente = remetente.toString())
+                    }
+                    adapter = AdapterMessage(messages, extras)
+                    recyclerView.adapter = adapter
+                } else {
+                    Log.d(TAG, "Current data: null")
+                }
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting documents: ", exception)
-            }
+
 
     }
 

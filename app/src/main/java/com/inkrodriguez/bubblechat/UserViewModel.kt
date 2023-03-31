@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ConversasViewModel : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private val _myLiveData = MutableLiveData<String>()
     val myLiveData: LiveData<String> = _myLiveData

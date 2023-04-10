@@ -24,10 +24,10 @@ class AdapterMessage(private val messages: List<Chat>, private val extras: Bundl
 
         fun bind(message: Chat) {
 
-            var splitHour = message.date.split(" ")
-            var hourFormat = splitHour[6]
+            var splitHour = message.date
+            var hourFormat = splitHour
 
-            timestampTextView.text = hourFormat.dropLast(3)
+            //timestampTextView.text = hourFormat
             messageTextView.text = message.message
             remetente.text = message.remetente
         }
@@ -39,10 +39,10 @@ class AdapterMessage(private val messages: List<Chat>, private val extras: Bundl
         private val remetente: TextView = itemView.findViewById(R.id.tvRemetente)
 
         fun bind(message: Chat) {
-            var splitHour = message.date.split(" ")
-            var hourFormat = splitHour[6]
+            var splitHour = message.date
+            var hourFormat = splitHour
 
-            timestampTextView.text = hourFormat.dropLast(3)
+            //timestampTextView.text = hourFormat
             messageTextView.text = message.message
             remetente.text = message.remetente
         }

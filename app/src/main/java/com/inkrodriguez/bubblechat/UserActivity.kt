@@ -6,11 +6,9 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -18,19 +16,19 @@ import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.data.*
 import com.inkrodriguez.bubblechat.databinding.ActivityUserBinding
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.sql.Timestamp
+import java.time.Instant
 
 
 class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
-    private lateinit var viewModel: UserViewModel
     private lateinit var adapter: AdapterMessage
     private var connect = Firebase.firestore
     private var db = connect
 
     override fun onStart() {
         super.onStart()
-            exibir()
+           exibir()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -43,7 +41,7 @@ class UserActivity : AppCompatActivity() {
         var intent = intent.getStringExtra("username")
 
         binding.btnEnviarMessage.setOnClickListener {
-            enviarMensagem()
+            sendMessage()
             exibir()
             binding.editMessage.setText("")
             Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show()
@@ -53,13 +51,13 @@ class UserActivity : AppCompatActivity() {
 
 
     fun exibir() {
-        var intent = intent.getStringExtra("username")
+       var intent = intent.getStringExtra("username")
 
         val sharedPref = applicationContext.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
         val valorSalvo = sharedPref?.getString("USERNAME", "NADA ENCONTRADO")
         val extras = Bundle()
         extras.putString("valorSalvo", valorSalvo.toString())
-//        extras.putString("usuarioAtual", intent.toString())
+        extras.putString("usuarioAtual", intent.toString())
 
 
         var recyclerView = binding.recyclerViewChat
@@ -75,73 +73,28 @@ class UserActivity : AppCompatActivity() {
                 if (snapshot != null) {
                     val messages = snapshot.documents.map { document ->
                         val message = document.getString("message")
-                        val date = document.getString("date")
+                        //val date = document.getDate("date")
                         val remetente = document.getString("remetente")
-                        Chat(message = message.toString(), date = date.toString(), remetente = remetente.toString())
+                        Chat(message = message.toString(), remetente = remetente.toString())
                     }
-                    adapter = AdapterMessage(messages, extras)
+                   adapter = AdapterMessage(messages, extras)
                     recyclerView.adapter = adapter
                 } else {
                     Log.d(TAG, "Current data: null")
                 }
             }
-
-
-    }
-
-
-    var mesAtual: String = ""
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun receiveData(): LocalDateTime{
-        return LocalDateTime.now()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun formatData(): String {
-        var month = receiveData().month
-        val dayOfMonth = receiveData().dayOfMonth
-        val dayOfYear = receiveData().year
-        val hour = receiveData().hour
-        val minute = receiveData().minute
-        val second = receiveData().second
-        var secondFormat: String
-        var minuteFormat: String
-        var hourFormat: String
-
-        when(month.value) {
-            1 -> mesAtual = "janeiro"
-            2 -> mesAtual = "fevereiro"
-            3 -> mesAtual = "março"
-            4 -> mesAtual = "abril"
-            5 -> mesAtual = "maio"
-            6 -> mesAtual = "junho"
-            7 -> mesAtual = "julho"
-            8 -> mesAtual = "agosto"
-            9 -> mesAtual = "setembro"
-            10 -> mesAtual = "outubro"
-            11 -> mesAtual = "novembro"
-            12 -> mesAtual = "dezembro"
-        }
-
-        secondFormat = addZeroBeforeNumber(second)
-        minuteFormat = addZeroBeforeNumber(minute)
-        hourFormat = addZeroBeforeNumber(hour)
-        return "$dayOfMonth de $mesAtual de $dayOfYear às $hourFormat:$minuteFormat:$secondFormat UTC-3"
-
-    }
-
-    private fun addZeroBeforeNumber(number: Int): String {
-        return if (number < 10) {
-            "0$number"
-        } else {
-            number.toString()
-        }
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun enviarMensagem() {
+    fun receiveDate(): java.util.Date? {
+        val instant = Instant.now()
+        return Timestamp.from(instant)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun sendMessage() {
         lifecycleScope.launch {
             var intent = intent.getStringExtra("username")
             val chatCollection = db.collection("messages")
@@ -152,7 +105,7 @@ class UserActivity : AppCompatActivity() {
             var destinatario = intent
 
             var messageMap = hashMapOf(
-                "date" to formatData(),
+                "date" to receiveDate(),
                 "remetente" to remetente,
                 "destinatario" to destinatario,
                 "message" to message

@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".UserActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_weight="1"
         android:orientation="horizontal"
+        app:cardBackgroundColor="#015D87"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,56 +20,73 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_margin="10dp"
             android:src="@drawable/foto_perfil_1"
-            app:civ_border_color="#ff000000"
+            app:civ_border_color="#FFFFFF"
             app:civ_border_width="2dp" />
 
         <TextView
             android:id="@+id/tvNomeMessage"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="120"
-            android:gravity="center|left"
+            android:gravity="left"
             android:text="Rodrigo"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp"
-            tools:layout_editor_absoluteX="40dp"
-            tools:layout_editor_absoluteY="22dp" />
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvStatusUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="43dp"
+            android:layout_weight="120"
+            android:gravity="left"
+            android:text="Status"
+            android:textColor="@color/white" />
 
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChat"
-        android:layout_width="match_parent"
-        android:layout_height="568dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="100"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:stackFromEnd="true"
         tools:itemCount="5" />
 
+
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewChat">
 
         <EditText
             android:id="@+id/editMessage"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:hint="Digite sua mensagem" />
+            android:hint="Digite sua mensagem"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="670dp" />
 
         <Button
             android:id="@+id/btnEnviarMessage"
@@ -76,10 +94,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Enviar" />
-
-
+            android:backgroundTint="#015D87"
+            android:text="Enviar"
+            tools:layout_editor_absoluteX="306dp"
+            tools:layout_editor_absoluteY="656dp" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

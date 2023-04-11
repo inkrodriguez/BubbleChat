@@ -21,7 +21,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.data.*
 import com.inkrodriguez.bubblechat.databinding.ActivityUserBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.sql.Date
 import java.sql.Timestamp
 import java.time.Instant
 
@@ -32,17 +37,10 @@ class UserActivity : AppCompatActivity() {
     private var connect = Firebase.firestore
     private var db = connect
 
+
     override fun onStart() {
         super.onStart()
-        exibir()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onPause() {
-        super.onPause()
+        messageBoard()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -56,67 +54,25 @@ class UserActivity : AppCompatActivity() {
 
         val editMessage = binding.editMessage.text
 
-        getStatus()
-
         binding.btnEnviarMessage.setOnClickListener {
             if(editMessage.isEmpty()){
                 Toast.makeText(this, "Digite alguma mensagem", Toast.LENGTH_SHORT).show()
             } else {
                 sendMessage()
-                exibir()
+                messageBoard()
                 binding.editMessage.setText("")
                 Toast.makeText(this, intent.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-        private fun getStatus() {
-                val db = FirebaseFirestore.getInstance()
-                val docRef = db.collection("users").document("inkrodriguez")
-                docRef.addSnapshotListener { snapshot, e ->
-                    try {
-                        if (e != null) {
-                            Toast.makeText(this, "Listen failed. $e", Toast.LENGTH_SHORT).show()
-                            return@addSnapshotListener
-                        }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun receiveDate(): java.util.Date? {
+        val instant = Instant.now()
+        return Date.from(instant)
+    }
 
-                        if (snapshot != null && snapshot.exists()) {
-                            val data = snapshot.data
-                            // Aqui você pode acessar o dado que deseja exibir, por exemplo:
-                            val status = data?.get("status") as? String
-                            if (status != null) {
-                                binding.tvStatusUser.text = status
-                                Toast.makeText(this, "Current data: $data", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(this, "Invalid status value: $status", Toast.LENGTH_SHORT).show()
-                            }
-                        } else {
-                            Toast.makeText(this, "Current data: null", Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (ex: Exception) {
-                        // Trate a exceção adequadamente
-                        Toast.makeText(this@UserActivity, "Error getting status, $ex", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-
-
-//        db.collection("users").document("inkrodriguez").addSnapshotListener { value, e ->
-//            if (e != null) {
-//                Log.w(TAG, "Listen failed.", e)
-//                return@addSnapshotListener
-//            }
-//
-//            if (value != null) {
-//                val status = value.getString("status")
-//            } else {
-//                Log.d(TAG, "Current data: null")
-//            }
-//        }
-
-
-    fun exibir() {
+    fun messageBoard() {
         val sharedPref: SharedPreferences = applicationContext.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
         val valorSalvo = sharedPref?.getString("USERNAME", "NADA ENCONTRADO")
         var intent = intent.getStringExtra("username")
@@ -150,14 +106,6 @@ class UserActivity : AppCompatActivity() {
             }
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun receiveDate(): java.util.Date? {
-        val instant = Instant.now()
-        return Timestamp.from(instant)
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage() {
         lifecycleScope.launch {
@@ -180,7 +128,5 @@ class UserActivity : AppCompatActivity() {
             }
         }
         }
-
-
 
 }

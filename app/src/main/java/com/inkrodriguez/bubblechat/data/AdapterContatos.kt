@@ -19,7 +19,7 @@ import com.inkrodriguez.bubblechat.R
 import com.inkrodriguez.bubblechat.UserActivity
 
 
-class AdapterContatos(private val characters: List<User>): RecyclerView.Adapter<AdapterContatos.CharacterViewHolder>() {
+class AdapterContatos(private val characters: MutableList<Friend>): RecyclerView.Adapter<AdapterContatos.CharacterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,7 +29,7 @@ class AdapterContatos(private val characters: List<User>): RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         holder.bind(characters[position])
-        var username = characters[position].nome
+        var username = characters[position].username
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, UserActivity::class.java)
@@ -44,12 +44,12 @@ class AdapterContatos(private val characters: List<User>): RecyclerView.Adapter<
 
     //SERÁ O LAYOUT DO ITEM, RECUPERA OS DADOS DO ITEMVIEW.
     class CharacterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bind(data: User){
+        fun bind(data: Friend){
             with(itemView){
                 val nome = findViewById<TextView>(R.id.tvNome)
                 //val pontuacao = findViewById<TextView>(R.id.tvPontuacao)
 
-                nome.text = data.nome
+                nome.text = data.username
                 //pontuacao.text = data.pontuacao
             }
         }

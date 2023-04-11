@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bubble_message">#7F9E8A</color>
     <color name="standard_color">#015D87</color>
+    <color name="red">#870105</color>
 </resources>

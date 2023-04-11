@@ -34,9 +34,6 @@ class MainActivity : AppCompatActivity() {
                         var username = value.getString("username")
                         var password = value.getString("password")
                         if (editPassword == password) {
-                            //MUDA O STATUS DE OFFLINE PARA ONLINE
-                            //db.collection("users").document(editLogin).update("status", "Online")
-
                             val intent = Intent(applicationContext, HomeActivity::class.java)
                             intent.putExtra("username", username)
                             startActivity(intent)
@@ -59,8 +56,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     fun getPreferences(){
         val sharedPref = this.applicationContext.getSharedPreferences("nome_da_preferencia", Context.MODE_PRIVATE)

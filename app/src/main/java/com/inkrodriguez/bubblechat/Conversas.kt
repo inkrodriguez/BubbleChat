@@ -1,6 +1,8 @@
 package com.inkrodriguez.bubblechat
 
 import android.content.ContentValues
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -37,22 +39,23 @@ class Conversas : Fragment() {
 
         var recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
+        val sharedPref: SharedPreferences? = context?.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
+        val valorSalvo = sharedPref?.getString("USERNAME", "NADA ENCONTRADO")
+        val listFriends = mutableListOf<Friend>()
 
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                val users = result.documents.map { document ->
-                    val nome = document.getString("nome")
-                    User(nome = nome.toString())
+        db.collection("users").document("$valorSalvo")
+            .get().addOnSuccessListener {
+                var friend = it.get("friends") as MutableList<*>
+
+                friend.forEach { f ->
+                    listFriends.add(Friend("$f"))
+
+                    val adapter = AdapterContatos(listFriends)
+
+                    recyclerView.adapter = adapter
                 }
 
-                val adapter = AdapterContatos(users)
-
-                recyclerView.adapter = adapter
-
-
-            }
-            .addOnFailureListener { exception ->
+            }.addOnFailureListener { exception ->
                 Log.d(ContentValues.TAG, "Error getting documents: ", exception)
             }
 

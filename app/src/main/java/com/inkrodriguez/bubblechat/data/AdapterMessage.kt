@@ -1,13 +1,29 @@
 package com.inkrodriguez.bubblechat.data
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.R
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class AdapterMessage(private val messages: List<Chat>, private val extras: Bundle?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -68,6 +84,7 @@ class AdapterMessage(private val messages: List<Chat>, private val extras: Bundl
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
         if (holder.itemViewType == VIEW_TYPE_ME) {
@@ -75,9 +92,19 @@ class AdapterMessage(private val messages: List<Chat>, private val extras: Bundl
         } else {
             (holder as OtherViewHolder).bind(message)
         }
+
     }
 
     override fun getItemCount(): Int {
         return messages.size
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun receiveDateAndFormat(): String {
+    val zoneId = ZoneId.of("UTC-3")
+    val dateTime = LocalDateTime.now(zoneId)
+    val formatter = DateTimeFormatter.ofPattern("dd/MMMM/yyyy - HH:mm:ss +")
+    val formattedDateTime = dateTime.format(formatter)
+    return formattedDateTime.replace("/", " de ").replace("-", "às").replace("+", "UTC-3")
 }

@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/conversas">
+    app:startDestination="@id/conversasFragment">
 
     <fragment
-        android:id="@+id/conversas"
-        android:name="com.inkrodriguez.bubblechat.Conversas"
+        android:id="@+id/conversasFragment"
+        android:name="com.inkrodriguez.bubblechat.ConversasFragment"
         android:label="fragment_conversas"
         tools:layout="@layout/fragment_conversas" />
     <fragment
@@ -16,8 +16,18 @@
         android:label="fragment_contatos"
         tools:layout="@layout/fragment_contatos" />
     <fragment
-        android:id="@+id/status"
-        android:name="com.inkrodriguez.bubblechat.Status"
-        android:label="fragment_status"
-        tools:layout="@layout/fragment_status" />
+        android:id="@+id/feed"
+        android:name="com.inkrodriguez.bubblechat.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.inkrodriguez.bubblechat.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.inkrodriguez.bubblechat.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

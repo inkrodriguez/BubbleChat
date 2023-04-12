@@ -25,7 +25,6 @@ class Contatos : Fragment() {
 
     private var connect = Firebase.firestore
     private var db = connect
-    private lateinit var viewModel: ContatosViewModel
 
 
     override fun onCreateView(
@@ -59,12 +58,6 @@ class Contatos : Fragment() {
 
         return view
 
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ContatosViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

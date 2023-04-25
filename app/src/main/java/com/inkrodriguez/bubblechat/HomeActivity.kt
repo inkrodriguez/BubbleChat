@@ -52,7 +52,7 @@ class HomeActivity : AppCompatActivity()  {
         }
 
         binding.btnSettings.setOnClickListener {
-            navController.navigate(R.id.settingsFragment)
+            navController.navigate(R.id.perfilFragment)
             viewModel.selectButton = 5
             viewModel.setImage()
         }

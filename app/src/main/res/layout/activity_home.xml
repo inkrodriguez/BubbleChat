@@ -80,7 +80,7 @@
             android:id="@+id/btnSettings"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/ic_settings_off" />
+            android:background="@drawable/ic_perfil_off" />
 
         <View
             android:layout_width="match_parent"

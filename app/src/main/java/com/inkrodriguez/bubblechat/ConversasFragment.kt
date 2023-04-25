@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.inkrodriguez.bubblechat.Adapters.AdapterContatos
 import com.inkrodriguez.bubblechat.data.*
 
 class ConversasFragment : Fragment() {

@@ -8,12 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-import com.inkrodriguez.bubblechat.data.AdapterContatos
-import com.inkrodriguez.bubblechat.data.AdapterUsers
+import com.inkrodriguez.bubblechat.Adapters.AdapterUsers
 import com.inkrodriguez.bubblechat.data.User
 
 class SearchFragment : Fragment() {

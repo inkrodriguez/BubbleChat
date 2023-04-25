@@ -16,7 +16,7 @@ class HomeViewModel : ViewModel() {
                 vmBinding.btnSearch.setBackgroundResource(R.drawable.ic_search_off)
                 vmBinding.btnMessages.setBackgroundResource(R.drawable.ic_message_off)
                 vmBinding.btnContacts.setBackgroundResource(R.drawable.ic_contatos_off)
-                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_settings_off)
+                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_perfil_off)
             }
 
             2 -> {
@@ -24,7 +24,7 @@ class HomeViewModel : ViewModel() {
                 vmBinding.btnSearch.setBackgroundResource(R.drawable.ic_search_on)
                 vmBinding.btnMessages.setBackgroundResource(R.drawable.ic_message_off)
                 vmBinding.btnContacts.setBackgroundResource(R.drawable.ic_contatos_off)
-                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_settings_off)
+                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_perfil_off)
             }
 
             3 -> {
@@ -32,14 +32,14 @@ class HomeViewModel : ViewModel() {
                 vmBinding.btnSearch.setBackgroundResource(R.drawable.ic_search_off)
                 vmBinding.btnMessages.setBackgroundResource(R.drawable.ic_message_on)
                 vmBinding.btnContacts.setBackgroundResource(R.drawable.ic_contatos_off)
-                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_settings_off)
+                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_perfil_off)
             }
             4 -> {
                 vmBinding.btnFeed.setBackgroundResource(R.drawable.ic_home_off)
                 vmBinding.btnSearch.setBackgroundResource(R.drawable.ic_search_off)
                 vmBinding.btnMessages.setBackgroundResource(R.drawable.ic_message_off)
                 vmBinding.btnContacts.setBackgroundResource(R.drawable.ic_contatos_on)
-                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_settings_off)
+                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_perfil_off)
             }
 
             5 -> {
@@ -47,7 +47,7 @@ class HomeViewModel : ViewModel() {
                 vmBinding.btnSearch.setBackgroundResource(R.drawable.ic_search_off)
                 vmBinding.btnMessages.setBackgroundResource(R.drawable.ic_message_off)
                 vmBinding.btnContacts.setBackgroundResource(R.drawable.ic_contatos_off)
-                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_settings_on)
+                vmBinding.btnSettings.setBackgroundResource(R.drawable.ic_perfil_on)
             }
         }
     }

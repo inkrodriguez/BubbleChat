@@ -11,4 +11,5 @@
     <color name="standard_color">#015D87</color>
     <color name="transparent_color_white">#66FFFFFF</color>
     <color name="red">#870105</color>
+    <color name="link_color">#014FC3</color>
 </resources>

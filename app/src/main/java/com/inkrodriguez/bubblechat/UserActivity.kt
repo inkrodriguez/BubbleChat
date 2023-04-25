@@ -1,10 +1,8 @@
 package com.inkrodriguez.bubblechat
 
-import android.R
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,22 +10,14 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.inkrodriguez.bubblechat.Adapters.AdapterMessage
 import com.inkrodriguez.bubblechat.data.*
 import com.inkrodriguez.bubblechat.databinding.ActivityUserBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.sql.Date
-import java.sql.Timestamp
 import java.time.Instant
 
 

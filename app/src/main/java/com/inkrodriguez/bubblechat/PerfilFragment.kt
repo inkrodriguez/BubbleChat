@@ -1,8 +1,7 @@
 package com.inkrodriguez.bubblechat
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -45,37 +44,43 @@ class PerfilFragment : Fragment() {
         val btnEditProfile = binding.btnEditProfile
 
         btnEditProfile.setOnClickListener {
-            startActivity(Intent(context, SettingsActivity::class.java))
+            //startActivity(Intent(context, SettingsActivity::class.java, null))
         }
 
         //traz todas as informações sobre o usuário
         readData(sharedPrefencesValue, tvName, tvOcupation, tvBiography, tvLink, tvFriendsSize)
 
         lifecycleScope.launch {
-            val listPublications = mutableListOf<Publication>()
 
-            db.collection("users").document(sharedPrefencesValue)
-                .get().addOnSuccessListener {
-                    var publi = it.get("publications") as MutableList<*>
+            val db = Firebase.firestore
+            val usersRef = db.collection("publications")
+            val query = usersRef.whereEqualTo("username", sharedPrefencesValue)
+            val listPosts: MutableList<Publication> = mutableListOf()
 
-                    publi.forEach { f ->
-                        listPublications.add(Publication("$f"))
-
-                        val adapter = AdapterPublications(listPublications)
-
-                        recyclerView.adapter = adapter
-                    }
-
-                    tvPublicationsSize.text = publi.size.toString()
-
-                }.addOnFailureListener { exception ->
-                    Log.d(ContentValues.TAG, "Error getting documents: ", exception)
+            val registration = query.addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(TAG, "Erro ao ouvir as publicações do usuário $sharedPrefencesValue", error)
+                    return@addSnapshotListener
                 }
+
+                listPosts.clear()
+
+                for (document in value!!) {
+                    val urls = document.getString("url").toString()
+                    listPosts.add(Publication(urls))
+                }
+
+                var adapter = AdapterPublications(listPosts, context?.applicationContext!!)
+                recyclerView.adapter = adapter
+            }
+
+            // Quando quiser parar de ouvir mudanças
+           // registration.remove()
 
         }
 
 
-        return view
+            return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

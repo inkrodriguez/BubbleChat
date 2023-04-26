@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.inkrodriguez.bubblechat.Adapters.AdapterUsers
 import com.inkrodriguez.bubblechat.data.User
@@ -43,13 +44,19 @@ class SearchFragment : Fragment() {
                         listUsers.add(
                             User(
                                 nome = it.getString("nome").toString(),
-                                username = it.getString("username").toString()
+                                username = it.getString("username").toString(),
+                                ocupation = it.getString("ocupation").toString(),
+                                fotoperfil = it.getString("fotoperfil").toString()
                             )
                                     )
-                        resultText += User(it.getString("nome").toString())
+
+                        val name = it.getString("nome").toString()
+                        val ocupation = it.getString("ocupation").toString()
+                        val fotoPerfil = it.getString("fotoperfil").toString()
+                        resultText += User(nome = name, ocupation = ocupation, fotoperfil = fotoPerfil)
                     }
 
-                    var adapter = AdapterUsers(resultText)
+                    var adapter = AdapterUsers(context, resultText)
                     recyclerViewSearchUsers.adapter = adapter
 
                     if(editSearch.text.isEmpty()){

@@ -1,20 +1,21 @@
 package com.inkrodriguez.bubblechat.Adapters
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.inkrodriguez.bubblechat.PerfilSearchUserActivity
 import com.inkrodriguez.bubblechat.R
-import com.inkrodriguez.bubblechat.UserActivity
-import com.inkrodriguez.bubblechat.data.Friend
 import com.inkrodriguez.bubblechat.data.Publication
 
-
-class AdapterPublications(private val publication: MutableList<Publication>): RecyclerView.Adapter<AdapterPublications.PublicationViewHolder>() {
+class AdapterPublications(
+    private val publication: MutableList<Publication>,
+    private val context: Context
+): RecyclerView.Adapter<AdapterPublications.PublicationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicationViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,12 +24,14 @@ class AdapterPublications(private val publication: MutableList<Publication>): Re
     }
 
     override fun onBindViewHolder(holder: PublicationViewHolder, position: Int) {
-        holder.bind(publication[position])
+        val item = holder.bind(publication[position])
         var username = publication[position].publications
 
+        val intent = Intent(holder.itemView.context, PerfilSearchUserActivity::class.java)
+        intent.putExtra("username", username)
+        val getIntent = intent.getStringExtra("username")
+
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, UserActivity::class.java)
-            intent.putExtra("username", username)
             holder.itemView.context.startActivity(intent)
         }
     }

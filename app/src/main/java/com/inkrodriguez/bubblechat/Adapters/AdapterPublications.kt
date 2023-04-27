@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.inkrodriguez.bubblechat.ExemploBottomSheetDialog
 import com.inkrodriguez.bubblechat.PerfilSearchUserActivity
 import com.inkrodriguez.bubblechat.R
 import com.inkrodriguez.bubblechat.data.Publication
 
 class AdapterPublications(
     private val publication: MutableList<Publication>,
-    private val context: Context
+    private val fragmentManager: FragmentManager
 ): RecyclerView.Adapter<AdapterPublications.PublicationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicationViewHolder {
@@ -25,16 +27,19 @@ class AdapterPublications(
 
     override fun onBindViewHolder(holder: PublicationViewHolder, position: Int) {
         val item = holder.bind(publication[position])
-        var username = publication[position].publications
-
-        val intent = Intent(holder.itemView.context, PerfilSearchUserActivity::class.java)
-        intent.putExtra("username", username)
-        val getIntent = intent.getStringExtra("username")
+        val username = publication[position].username
+        val url = publication[position].url
 
         holder.itemView.setOnClickListener {
-            holder.itemView.context.startActivity(intent)
+            val intent = Intent()
+            intent.putExtra("url", url)
+
+            val bottomSheetDialog = ExemploBottomSheetDialog()
+            bottomSheetDialog.setIntent(intent)
+            bottomSheetDialog.show(fragmentManager, "ExemploBottomSheetDialog")
         }
     }
+
 
     override fun getItemCount(): Int {
         return publication.size
@@ -45,9 +50,9 @@ class AdapterPublications(
         fun bind(data: Publication){
             with(itemView){
                 val image = findViewById<ImageView>(R.id.imagePublication)
-                val link = data.publications
+                val link = data.url
 
-                Glide.with(context).load("$link").into(image)
+                Glide.with(context).load(link).into(image)
             }
         }
     }

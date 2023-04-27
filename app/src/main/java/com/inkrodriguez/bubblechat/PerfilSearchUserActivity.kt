@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,6 +32,10 @@ class PerfilSearchUserActivity : AppCompatActivity() {
         binding = ActivityPerfilSearchUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val sharedPref: SharedPreferences? = this.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
+        val sharedPrefencesValue = sharedPref?.getString("USERNAME", "NADA ENCONTRADO").toString()
+
+
         val tvName = binding.tvNamePerfil
         val tvOcupation = binding.tvOcupationPerfil
         val tvBiography = binding.tvBiographyPerfil
@@ -41,13 +46,57 @@ class PerfilSearchUserActivity : AppCompatActivity() {
         val tvPublicationsSize = binding.tvPublicationsSize
         val recyclerView = binding.recyclerView
         val btnEditProfile = binding.btnEditProfile
+        val fragmentManager: FragmentManager = supportFragmentManager
 
-        readData(intent, fotoPerfil, tvName, tvOcupation, tvBiography, tvLink, tvFriendsSize, tvPublicationsSize)
+        readDataUsers(intent, fotoPerfil, tvName, tvOcupation, tvBiography, tvLink, tvFriendsSize)
+        readDataPublications(sharedPrefencesValue, fragmentManager, recyclerView, tvPublicationsSize)
 
     }
 
-    private fun readData(intent: String, fotoPerfil: CircleImageView, tvName: TextView, tvOcupation: TextView,
-                 tvBiography: TextView, tvLink: TextView, tvFriendsSize: TextView, tvPublicationsSize: TextView
+    private fun readDataPublications(sharedPrefencesValue: String, fragmentManager: FragmentManager, recyclerView: RecyclerView,
+                                     tvPublicationsSize: TextView) {
+
+        lifecycleScope.launch {
+
+            val getIntent = intent.getStringExtra("username")
+
+            val db = Firebase.firestore
+            val usersRef = db.collection("publications")
+            val query = usersRef.whereEqualTo("username", getIntent)
+            val listPosts: MutableList<Publication> = mutableListOf()
+
+            val registration = query.addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.w(
+                        ContentValues.TAG,
+                        "Erro ao ouvir as publicações do usuário $sharedPrefencesValue",
+                        error
+                    )
+                    return@addSnapshotListener
+                }
+
+                listPosts.clear()
+
+                for (document in value!!) {
+                    val urls = document.getString("url").toString()
+                    listPosts.add(Publication(url = urls))
+                }
+
+                tvPublicationsSize.text = listPosts.size.toString()
+
+                var adapter = AdapterPublications(listPosts, fragmentManager)
+                recyclerView.adapter = adapter
+            }
+
+            // Quando quiser parar de ouvir mudanças
+            // registration.remove()
+
+        }
+    }
+
+
+    private fun readDataUsers(intent: String, fotoPerfil: CircleImageView, tvName: TextView, tvOcupation: TextView,
+                 tvBiography: TextView, tvLink: TextView, tvFriendsSize: TextView
     ){
 
         db.collection("users").document(intent).addSnapshotListener { value, error ->
@@ -67,16 +116,6 @@ class PerfilSearchUserActivity : AppCompatActivity() {
                 val friendsList = list.firstOrNull() as? List<*>
                 val friendsListSize = friendsList?.size ?: 0
                 tvFriendsSize.text = "$friendsListSize"
-
-                val listPublications = mutableListOf<Publication>()
-
-                var publi = value?.get("publications") as MutableList<*>
-
-                publi.forEach { f ->
-                    listPublications.add(Publication("$f"))
-                }
-
-                tvPublicationsSize.text = publi.size.toString()
 
             }
         }

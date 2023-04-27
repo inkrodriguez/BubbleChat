@@ -1,5 +1,6 @@
 package com.inkrodriguez.bubblechat
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,7 +12,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import android.view.LayoutInflater
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.Adapters.AdapterPublications
@@ -42,6 +45,10 @@ class PerfilFragment : Fragment() {
         val tvPublicationsSize = binding.tvPublicationsSize
         val recyclerView = binding.recyclerView
         val btnEditProfile = binding.btnEditProfile
+        val fragmentManager: FragmentManager = requireFragmentManager()
+
+
+
 
         btnEditProfile.setOnClickListener {
             //startActivity(Intent(context, SettingsActivity::class.java, null))
@@ -49,6 +56,20 @@ class PerfilFragment : Fragment() {
 
         //traz todas as informações sobre o usuário
         readData(sharedPrefencesValue, tvName, tvOcupation, tvBiography, tvLink, tvFriendsSize)
+
+        lifecycleScope.launch {
+            readDataPublications(sharedPrefencesValue, recyclerView, tvPublicationsSize)
+        }
+
+            return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun readDataPublications(sharedPrefencesValue: String, recyclerView: RecyclerView,
+                                     tvPublicationsSize: TextView) {
 
         lifecycleScope.launch {
 
@@ -59,7 +80,11 @@ class PerfilFragment : Fragment() {
 
             val registration = query.addSnapshotListener { value, error ->
                 if (error != null) {
-                    Log.w(TAG, "Erro ao ouvir as publicações do usuário $sharedPrefencesValue", error)
+                    Log.w(
+                        ContentValues.TAG,
+                        "Erro ao ouvir as publicações do usuário $sharedPrefencesValue",
+                        error
+                    )
                     return@addSnapshotListener
                 }
 
@@ -67,24 +92,19 @@ class PerfilFragment : Fragment() {
 
                 for (document in value!!) {
                     val urls = document.getString("url").toString()
-                    listPosts.add(Publication(urls))
+                    listPosts.add(Publication(url = urls))
                 }
 
-                var adapter = AdapterPublications(listPosts, context?.applicationContext!!)
+                tvPublicationsSize.text = listPosts.size.toString()
+
+                var adapter = AdapterPublications(listPosts, requireFragmentManager())
                 recyclerView.adapter = adapter
             }
 
             // Quando quiser parar de ouvir mudanças
-           // registration.remove()
+            // registration.remove()
 
         }
-
-
-            return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     fun readData(sharedPrefencesValue: String, tvName: TextView, tvOcupation: TextView,

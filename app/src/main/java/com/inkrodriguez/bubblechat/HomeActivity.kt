@@ -18,6 +18,7 @@ class HomeActivity : AppCompatActivity()  {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         var intent = intent.getStringExtra("username")
         var usuarioAtual = intent.toString()
@@ -28,7 +29,7 @@ class HomeActivity : AppCompatActivity()  {
         navController = navHostFragment.navController
 
         binding.btnFeed.setOnClickListener {
-            navController.navigate(R.id.feed)
+            navController.navigate(R.id.feedFragment)
             viewModel.selectButton = 1
             viewModel.setImage()
         }
@@ -39,14 +40,14 @@ class HomeActivity : AppCompatActivity()  {
             viewModel.setImage()
         }
 
-        binding.btnMessages.setOnClickListener {
+        binding.btnAddPublication.setOnClickListener {
             navController.navigate(R.id.conversasFragment)
             viewModel.selectButton = 3
             viewModel.setImage()
         }
 
         binding.btnContacts.setOnClickListener {
-            navController.navigate(R.id.contatos)
+            navController.navigate(R.id.contatosFragment)
             viewModel.selectButton = 4
             viewModel.setImage()
         }

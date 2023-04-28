@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val sharedPref: SharedPreferences? = applicationContext.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
         val sharedPrefencesValue = sharedPref?.getString("USERNAME", "NADA ENCONTRADO").toString()

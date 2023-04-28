@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/conversasFragment">
+    app:startDestination="@id/feedFragment">
 
     <fragment
         android:id="@+id/conversasFragment"
@@ -11,12 +11,12 @@
         android:label="fragment_conversas"
         tools:layout="@layout/fragment_conversas" />
     <fragment
-        android:id="@+id/contatos"
+        android:id="@+id/contatosFragment"
         android:name="com.inkrodriguez.bubblechat.Contatos"
         android:label="fragment_contatos"
         tools:layout="@layout/fragment_contatos" />
     <fragment
-        android:id="@+id/feed"
+        android:id="@+id/feedFragment"
         android:name="com.inkrodriguez.bubblechat.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" />

@@ -37,7 +37,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\rodri\Desktop\icones\bookmark-android\res\drawable-xxxhdpi\bookmark_48.png" />
+                                                <entry key="imagePath" value="C:\Users\rodri\Desktop\icones\filter-android\res\drawable-xxxhdpi\filter_48.png" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -71,10 +71,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\rodri\Desktop\icones\bookmark-android\res\drawable-xxxhdpi\bookmark_48.png" />
-                                      <entry key="outputName" value="ic_fav_bubble" />
+                                      <entry key="imageAsset" value="C:\Users\rodri\Desktop\icones\filter-android\res\drawable-xxxhdpi\filter_48.png" />
+                                      <entry key="outputName" value="ic_filter" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="015d87" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>

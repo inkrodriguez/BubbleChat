@@ -31,6 +31,7 @@ class PerfilSearchUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPerfilSearchUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         val sharedPref: SharedPreferences? = this.getSharedPreferences("USERNAME", Context.MODE_PRIVATE)
         val sharedPrefencesValue = sharedPref?.getString("USERNAME", "NADA ENCONTRADO").toString()

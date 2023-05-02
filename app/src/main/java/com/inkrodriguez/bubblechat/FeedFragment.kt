@@ -1,26 +1,19 @@
 package com.inkrodriguez.bubblechat
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.dynamic.SupportFragmentWrapper
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.Adapters.AdapterFeed
-import com.inkrodriguez.bubblechat.Adapters.AdapterPublications
 import com.inkrodriguez.bubblechat.data.Publication
-import org.w3c.dom.Text
 
 class FeedFragment : Fragment() {
 
@@ -63,7 +56,14 @@ class FeedFragment : Fragment() {
 
             if (value != null) {
                 value.documents.forEach {
-                    listPublications.add(Publication(it.get("username").toString(), it.get("url").toString()))
+                    listPublications.add(
+                        Publication(
+                            it.get("username").toString(),
+                            it.get("url").toString(),
+                            it.get("location").toString(),
+                            it.get("title").toString(),
+                            it.get("like").toString()
+                        ))
                 }
             }
 

@@ -1,7 +1,6 @@
 package com.inkrodriguez.bubblechat
 
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle

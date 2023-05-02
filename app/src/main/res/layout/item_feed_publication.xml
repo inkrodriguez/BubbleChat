@@ -88,6 +88,7 @@
                 android:src="@drawable/ic_like_bubble" />
 
             <ImageView
+                android:id="@+id/imageViewCommentsFeed"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_weight="1"
@@ -111,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="0 Curtidas" />
+            android:text="0 Likes" />
 
         <TextView
             android:id="@+id/tvTitlePerfilSheetDialog"
@@ -119,16 +120,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Título da foto"
+            android:text="Títle"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvSubtitlePerfilSheetDialog"
+            android:id="@+id/tvCommentsPerfilSheetDialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Subtítulo" />
+            android:text="Comments" />
 
 
     </LinearLayout>

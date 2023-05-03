@@ -37,7 +37,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\rodri\Desktop\icones\angle-left-android\res\drawable-xxxhdpi\angle-left_48.png" />
+                                                <entry key="imagePath" value="C:\Users\rodri\Desktop\icones\thumbs-up-android\res\drawable-xxxhdpi\thumbs-up_48.png" />
                                                 <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
@@ -71,10 +71,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\rodri\Desktop\icones\angle-left-android\res\drawable-xxxhdpi\angle-left_48.png" />
-                                      <entry key="outputName" value="ic_back" />
+                                      <entry key="imageAsset" value="C:\Users\rodri\Desktop\icones\thumbs-up-android\res\drawable-xxxhdpi\thumbs-up_48.png" />
+                                      <entry key="outputName" value="ic_like_up" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="themeColor" value="015d87" />
                                     </map>
                                   </option>
                                 </PersistentState>

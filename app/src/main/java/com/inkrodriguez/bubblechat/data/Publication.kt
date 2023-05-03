@@ -4,7 +4,5 @@ data class Publication(
     var username: String = "",
     var url: String = "",
     var location: String = "",
-    var title: String = "",
-    var like: String = ""
-
+    var title: String = ""
     )

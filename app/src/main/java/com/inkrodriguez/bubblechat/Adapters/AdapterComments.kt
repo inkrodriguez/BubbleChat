@@ -2,6 +2,7 @@ package com.inkrodriguez.bubblechat.Adapters
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,13 @@ import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.R
 import com.inkrodriguez.bubblechat.data.Comment
 
+
+
 class AdapterComments(private val comment: List<Comment>): RecyclerView.Adapter<AdapterComments.CommentViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_comment, parent, false)
-        return CommentViewHolder(view)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
+        return CommentViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
@@ -39,9 +41,10 @@ class AdapterComments(private val comment: List<Comment>): RecyclerView.Adapter<
                 val sharedPrefencesValue = sharedPref?.getString("USERNAME", "NADA ENCONTRADO").toString()
                 val db = Firebase.firestore
 
-                val image = findViewById<ImageView>(R.id.imgViewUserComment)
-                val tvUsername = findViewById<TextView>(R.id.tvUsernameComment)
-                val tvComment = findViewById<TextView>(R.id.tvComment)
+                val image = findViewById<ImageView>(R.id.imgViewUserCommentItem)
+                val tvUsername = findViewById<TextView>(R.id.tvUsernameCommentItem)
+                val tvComment = findViewById<TextView>(R.id.tvCommentItem)
+                var tvSizeComments = findViewById<TextView>(R.id.tvSizeComments)
                 val link = data.url
 
                 tvUsername.text = data.sender

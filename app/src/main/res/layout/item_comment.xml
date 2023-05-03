@@ -7,7 +7,7 @@
     android:layout_margin="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgViewUserComment"
+        android:id="@+id/imgViewUserCommentItem"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/foto_perfil_1"
@@ -20,17 +20,17 @@
             android:layout_marginLeft="8dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgViewUserComment"
+            app:layout_constraintStart_toEndOf="@+id/imgViewUserCommentItem"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/tvUsernameComment"
+                android:id="@+id/tvUsernameCommentItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username" />
 
             <TextView
-                android:id="@+id/tvComment"
+                android:id="@+id/tvCommentItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title" />

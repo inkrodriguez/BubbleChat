@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.CollectionReference
@@ -71,7 +72,6 @@ class CommentsActivity : AppCompatActivity() {
     }
 
     private fun recordComments(editComment: EditText, sharedPreferencesValue: String, username: String, url: String, adapterComments: AdapterComments){
-        binding.progressBar.visibility = View.VISIBLE
         db.collection("comments").add(Comment(
             comment = editComment.text.toString(),
             sender = sharedPreferencesValue,

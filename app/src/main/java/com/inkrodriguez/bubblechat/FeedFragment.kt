@@ -2,14 +2,14 @@ package com.inkrodriguez.bubblechat
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.Adapters.AdapterFeed
@@ -61,15 +61,13 @@ class FeedFragment : Fragment() {
                             it.get("username").toString(),
                             it.get("url").toString(),
                             it.get("location").toString(),
-                            it.get("title").toString(),
-                            it.get("like").toString()
+                            it.get("title").toString()
                         ))
                 }
             }
 
             val adapter = AdapterFeed(listPublications, fragmentManager, this.requireContext())
             recyclerView.adapter = adapter
-
 
         }
     }

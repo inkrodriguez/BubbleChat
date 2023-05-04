@@ -92,11 +92,53 @@ class AdapterFeed(
                     startActivity(context, intent, null)
                 }
 
-                val collection = db.collection("likes")
-                val query = collection.whereEqualTo("url", data.url).whereEqualTo("username", sharedPreferencesValue)
+                val collectionSavedPosts = db.collection("savedposts")
+                val querySavedPosts = collectionSavedPosts.whereEqualTo("url", data.url).whereEqualTo("username", sharedPreferencesValue)
 
-                db.collection("likes").whereEqualTo("url", data.url).whereEqualTo("username", sharedPreferencesValue)
-                    .addSnapshotListener { it, error ->
+                querySavedPosts.addSnapshotListener { value, error ->
+
+                    //verifica no banco se está com existe ou não para deixar a imagem do botão pressionada.
+                        if(value?.documents?.size == 1){
+                            btnSave.setImageResource(R.drawable.ic_save_up)
+                        }   else {
+                            btnSave.setImageResource(R.drawable.ic_fav_bubble)
+                        }
+
+
+                    val docSize: Int = value?.documents?.size ?: 0
+
+                    btnSave.setOnClickListener {
+
+                        if(docSize == 1){
+                            value?.documents?.forEach { document ->
+                                var docId = document.id
+                                collectionSavedPosts.document(docId).delete().addOnSuccessListener {
+                                    Log.d(TAG, "Document deleted successfully!")
+                                    btnSave.setImageResource(R.drawable.ic_fav_bubble)
+                                }.addOnFailureListener { Log.d(TAG, "Error deleting document!") }
+                            }
+                        } else {
+                            val savedPost =
+                                Publication(username = sharedPreferencesValue, url = data.url)
+                            collectionSavedPosts.add(savedPost).addOnSuccessListener {
+                                Log.d(TAG, "Document successfully added!")
+                                btnSave.setImageResource(R.drawable.ic_save_up)
+                            }.addOnFailureListener {
+                                Log.d(TAG, "Error adding document")
+                            }
+
+                        }
+                    }
+
+
+                }
+
+
+
+                val collectionLikes = db.collection("likes")
+                val queryLikes = collectionLikes.whereEqualTo("url", data.url).whereEqualTo("username", sharedPreferencesValue)
+
+                    queryLikes.addSnapshotListener { it, error ->
 
                         //verifica no banco se está com true ou false para deixar a imagem do botão pressionada.
                         it?.documents?.forEach {
@@ -114,18 +156,18 @@ class AdapterFeed(
                                 it?.documents?.forEach {
                                     var result = it.get("like")
                                     if(result == false){
-                                        collection.document(it.id).update("like", true).addOnSuccessListener {
+                                        collectionLikes.document(it.id).update("like", true).addOnSuccessListener {
                                             btnLike.setImageResource(R.drawable.ic_like_up)
                                         }.addOnFailureListener { Toast.makeText(context, "Erro1", Toast.LENGTH_SHORT).show() }
                                     } else {
-                                        collection.document(it.id).update("like", false).addOnSuccessListener {
+                                        collectionLikes.document(it.id).update("like", false).addOnSuccessListener {
                                             btnLike.setImageResource(R.drawable.ic_like_bubble)
                                         }.addOnFailureListener { Toast.makeText(context, "Erro2", Toast.LENGTH_SHORT).show() }
                                     }
                                 }
                             } else {
                                 var like = Like(username = sharedPreferencesValue, url = data.url, like = true)
-                                collection.add(like).addOnSuccessListener {
+                                collectionLikes.add(like).addOnSuccessListener {
                                     btnLike.setImageResource(R.drawable.ic_like_up)
                                 }.addOnFailureListener { Toast.makeText(context, "Erro2", Toast.LENGTH_SHORT).show() }
                             }

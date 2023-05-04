@@ -2,6 +2,7 @@ package com.inkrodriguez.bubblechat
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -44,13 +45,17 @@ class PerfilFragment : Fragment() {
         val tvPublicationsSize = binding.tvPublicationsSize
         val recyclerView = binding.recyclerView
         val btnEditProfile = binding.btnEditProfile
+        val btnMenu = binding.btnMenuFragmentPerfil
         val fragmentManager: FragmentManager = requireFragmentManager()
 
 
-
+        btnMenu.setOnClickListener {
+            val bottomSheetDialog = MenuBottomDialog()
+            bottomSheetDialog.show(fragmentManager, "MenuBottomDialog")
+        }
 
         btnEditProfile.setOnClickListener {
-            //startActivity(Intent(context, SettingsActivity::class.java, null))
+            startActivity(Intent(context, SettingsActivity::class.java))
         }
 
         //traz todas as informações sobre o usuário

@@ -6,10 +6,12 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -74,6 +76,7 @@ class UserActivity : AppCompatActivity() {
         var recyclerView = binding.recyclerViewChat
         val db = Firebase.firestore
         db.collection("messages")
+            .whereEqualTo("destinatario", intent)
             .orderBy("date", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {

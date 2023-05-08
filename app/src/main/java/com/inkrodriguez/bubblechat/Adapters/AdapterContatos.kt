@@ -1,17 +1,22 @@
 package com.inkrodriguez.bubblechat.Adapters
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.inkrodriguez.bubblechat.R
 import com.inkrodriguez.bubblechat.UserActivity
 import com.inkrodriguez.bubblechat.data.Friend
 
 
-class AdapterContatos(private val characters: MutableList<Friend>): RecyclerView.Adapter<AdapterContatos.CharacterViewHolder>() {
+class AdapterContatos(private val characters: MutableList<Friend>, private val context: Context): RecyclerView.Adapter<AdapterContatos.CharacterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -39,10 +44,22 @@ class AdapterContatos(private val characters: MutableList<Friend>): RecyclerView
         fun bind(data: Friend){
             with(itemView){
                 val nome = findViewById<TextView>(R.id.tvNome)
-                //val pontuacao = findViewById<TextView>(R.id.tvPontuacao)
+                val fotoPerfil = findViewById<ImageView>(R.id.imageViewItemMessages)
 
                 nome.text = data.username
-                //pontuacao.text = data.pontuacao
+                readDataUser(fotoPerfil, data.username, context)
+
+
+            }
+        }
+
+        fun readDataUser(imagePerfil: ImageView, username: String, context: Context){
+            val db = Firebase.firestore
+            db.collection("users").whereEqualTo("username", username).addSnapshotListener { value, error ->
+                value?.documents?.forEach {
+                    var url = it.get("fotoperfil")
+                    Glide.with(context).load(url).into(imagePerfil)
+                }
             }
         }
     }

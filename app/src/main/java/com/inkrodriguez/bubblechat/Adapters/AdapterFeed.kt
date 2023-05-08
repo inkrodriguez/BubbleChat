@@ -1,5 +1,6 @@
 package com.inkrodriguez.bubblechat.Adapters
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -57,6 +58,7 @@ class AdapterFeed(
 
     //SERÁ O LAYOUT DO ITEM, RECUPERA OS DADOS DO ITEMVIEW.
     class PublicationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: Publication) {
             with(itemView) {
 
@@ -93,23 +95,24 @@ class AdapterFeed(
                 }
 
                 val collectionSavedPosts = db.collection("savedposts")
-                val querySavedPosts = collectionSavedPosts.whereEqualTo("url", data.url).whereEqualTo("username", sharedPreferencesValue)
+                val querySavedPosts = collectionSavedPosts.whereEqualTo("url", data.url)
+                    .whereEqualTo("username", sharedPreferencesValue)
 
                 querySavedPosts.addSnapshotListener { value, error ->
 
                     //verifica no banco se está com existe ou não para deixar a imagem do botão pressionada.
-                        if(value?.documents?.size == 1){
-                            btnSave.setImageResource(R.drawable.ic_save_up)
-                        }   else {
-                            btnSave.setImageResource(R.drawable.ic_fav_bubble)
-                        }
+                    if (value?.documents?.size == 1) {
+                        btnSave.setImageResource(R.drawable.ic_save_up)
+                    } else {
+                        btnSave.setImageResource(R.drawable.ic_fav_bubble)
+                    }
 
 
                     val docSize: Int = value?.documents?.size ?: 0
 
                     btnSave.setOnClickListener {
 
-                        if(docSize == 1){
+                        if (docSize == 1) {
                             value?.documents?.forEach { document ->
                                 var docId = document.id
                                 collectionSavedPosts.document(docId).delete().addOnSuccessListener {
@@ -132,7 +135,6 @@ class AdapterFeed(
 
 
                 }
-
 
 
                 val collectionLikes = db.collection("likes")
@@ -176,7 +178,16 @@ class AdapterFeed(
                         //contagem de curtida nas fotos logo após o clique.
                         db.collection("likes").whereEqualTo("url", data.url).whereEqualTo("like", true)
                             .addSnapshotListener { value, error ->
-                                tvLike.text = "${value?.documents?.size.toString()} likes"
+                                var docSize = value?.documents?.size
+                                if(docSize == 1) {
+                                    tvLike.text = "$docSize like"
+                                } else if(docSize == 0){
+                                    tvLike.text = "no likes"
+                                } else if (docSize != null) {
+                                    if(docSize >= 1){
+                                        tvLike.text = "$docSize likes"
+                                    }
+                                }
                             }
 
                     }

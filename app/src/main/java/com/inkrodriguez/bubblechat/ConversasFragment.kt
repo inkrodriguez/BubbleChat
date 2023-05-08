@@ -45,7 +45,7 @@ class ConversasFragment : Fragment() {
                 friend.forEach { f ->
                     listFriends.add(Friend("$f"))
 
-                    val adapter = AdapterContatos(listFriends)
+                    val adapter = AdapterContatos(listFriends, this.requireContext())
 
                     recyclerView.adapter = adapter
                 }

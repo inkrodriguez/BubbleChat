@@ -39,7 +39,7 @@ class ChatActivity : AppCompatActivity() {
                 friend.forEach { f ->
                     listFriends.add(Friend("$f"))
 
-                    val adapter = AdapterContatos(listFriends)
+                    val adapter = AdapterContatos(listFriends, this.applicationContext)
 
                     recyclerView.adapter = adapter
                 }

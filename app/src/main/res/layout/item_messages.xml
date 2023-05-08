@@ -6,25 +6,26 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewItemMessages"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:src="@drawable/foto_perfil_3" />
+
 
     <TextView
         android:id="@+id/tvNome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         android:text="Rodrigo"
         android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/imageViewItemMessages"
+        app:layout_constraintTop_toTopOf="@+id/imageViewItemMessages" />
 
     <TextView
         android:id="@+id/tvMessages"
@@ -33,6 +34,6 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="0dp"
         android:text="Aqui entra qualquer tipo de mensagem"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imageViewItemMessages"
         app:layout_constraintTop_toBottomOf="@+id/tvNome" />
 </androidx.constraintlayout.widget.ConstraintLayout>
